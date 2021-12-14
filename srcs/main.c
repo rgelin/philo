@@ -6,7 +6,7 @@
 /*   By: rgelin <rgelin@student.s19.be>             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/14 14:52:08 by rgelin            #+#    #+#             */
-/*   Updated: 2021/12/14 16:12:05 by rgelin           ###   ########.fr       */
+/*   Updated: 2021/12/14 16:17:55 by rgelin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,7 +31,7 @@ void	init_philo(t_data *data, t_philo *philo)
 	i = -1;
 	while (++i < data->nb_philo)
 	{
-		philo->id_philo = i;
+		philo->id_philo = i + 1;
 		if (i == 0)
 			philo->left_fork = &data->mutex[data->nb_philo - 1];
 		else
