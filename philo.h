@@ -6,7 +6,7 @@
 /*   By: rgelin <rgelin@student.s19.be>             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/14 14:53:17 by rgelin            #+#    #+#             */
-/*   Updated: 2021/12/14 15:59:22 by rgelin           ###   ########.fr       */
+/*   Updated: 2021/12/15 15:25:25 by rgelin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,19 +23,28 @@
 
 typedef struct	s_data
 {
-	int	nb_philo;
-	int	time_to_die;
-	int	time_to_eat;
-	int	time_to_sleep;
-	int	nb_time_eat;
+	int				nb_philo;
+	int				time_to_die;
+	int				time_to_eat;
+	int				time_to_sleep;
+	int				nb_time_eat;
+	// int				die;
 	pthread_mutex_t	*mutex;
+	pthread_t		*philo_thread;
 }	t_data;
 
 typedef struct	s_philo
 {
 	int				id_philo;
+	int				nb_philo;
+	int				time_to_die;
+	int				time_to_eat;
+	int				time_to_sleep;
+	int				nb_time_eat;
+	// int				*die;
 	pthread_mutex_t	*left_fork;
 	pthread_mutex_t	*right_fork;
+	
 }	t_philo;
 
 //==============LIBFT_UTILS==============//
