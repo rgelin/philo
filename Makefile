@@ -1,4 +1,5 @@
 NAME		=	philo
+EXC			=	philo
 
 #-------------------SOURCES PATH----------------------
 
@@ -13,6 +14,7 @@ FLAGS		=	-Wall -Werror -Wextra
 #-------------------SOURCES FILES----------------------
 
 SRCS		=	$(SOURCES)main.c \
+				$(SOURCES)init_struct.c \
 				$(SOURCES)error.c \
 				$(SOURCES)mutex.c
 
@@ -69,7 +71,7 @@ re: fclean all
 #-------------------TESTS-----------------------
 
 test1 : all
-		./$(NAME) 5 800 200 200
+		./$(EXC) 5 800 200 200
 
 test2 : all
-		./$(NAME) 5 800 200 200 7
+		./$(EXC) 5 800 200 200 7
