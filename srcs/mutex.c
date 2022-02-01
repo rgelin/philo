@@ -6,7 +6,7 @@
 /*   By: rgelin <rgelin@student.s19.be>             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/14 15:39:19 by rgelin            #+#    #+#             */
-/*   Updated: 2021/12/17 14:43:57 by rgelin           ###   ########.fr       */
+/*   Updated: 2021/12/22 22:02:19 by rgelin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,6 +35,9 @@ int	destroy_mutex(t_data *data)
 
 	i = -1;
 	pthread_mutex_destroy(&data->display);
+	while (++i < data->nb_philo)
+		pthread_mutex_unlock(&data->mutex[i]);
+	i = -1;
 	if (data->mutex)
 	{
 		while (++i < data->nb_philo)

@@ -14,9 +14,11 @@ FLAGS		=	-Wall -Werror -Wextra
 #-------------------SOURCES FILES----------------------
 
 SRCS		=	$(SOURCES)main.c \
-				$(SOURCES)init_struct.c \
 				$(SOURCES)error.c \
-				$(SOURCES)mutex.c
+				$(SOURCES)init_struct.c \
+				$(SOURCES)mutex.c \
+				$(SOURCES)dead.c \
+				$(SOURCES)routine_philo.c
 
 
 SRCS_UTILS	=	$(UTILS)ft_atoi.c \

@@ -6,7 +6,7 @@
 /*   By: rgelin <rgelin@student.s19.be>             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/14 14:53:17 by rgelin            #+#    #+#             */
-/*   Updated: 2021/12/17 14:39:13 by rgelin           ###   ########.fr       */
+/*   Updated: 2021/12/24 16:24:39 by rgelin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,6 +20,10 @@
 # include <sys/time.h>
 # include <limits.h>
 
+# define RED "\x1b[31m"
+# define GREEN "\x1b[32m"
+# define YELLOW "\x1b[33m"
+# define NO_COLOR "\x1b[0m"
 
 typedef struct	s_data
 {
@@ -29,8 +33,10 @@ typedef struct	s_data
 	int				time_to_sleep;
 	int				nb_time_eat;
 	int				die;
+	long			start_time;
 	pthread_mutex_t	*mutex;
 	pthread_t		*philo_thread;
+	pthread_t		dead;
 	pthread_mutex_t	display;
 }	t_data;
 
@@ -46,11 +52,16 @@ typedef struct	s_philo
 	pthread_mutex_t	*left_fork;
 	pthread_mutex_t	*right_fork;
 	pthread_mutex_t	*display;
-	long			start_time;
-	long			current_time;
-	long			end_time;
-	
+	long			*start_time;
+	long			last_meal;	
 }	t_philo;
+
+typedef struct s_dead
+{
+	int	nb_philo;
+	int	time_to_die;
+	t_philo **philo;
+}	t_dead;
 
 //==============LIBFT_UTILS==============//
 
@@ -70,7 +81,12 @@ int		destroy_mutex(t_data *data);
 void	display_philo_message(t_philo *philo, long time, int id, char *msg);
 
 //==============MAIN==============//
-int	init_struct_data(t_data *data, char *av[]);
+int		init_struct_data(t_data *data, char *av[]);
 void	init_philo(t_data *data, t_philo *philo);
+long	get_time(void);
+void	*routine_philo(void *arg);
+
+void	*dead_thread_function(void *arg);
+int		ft_dead(t_philo *philo, long current_meal);
 
 #endif
