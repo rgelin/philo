@@ -9,7 +9,7 @@ SOURCES		=	./srcs/
 #-------------------COMPILATION----------------------
 
 CC			=	gcc
-FLAGS		=	-Wall -Werror -Wextra
+FLAGS		=	-Wall -Werror -Wextra 
 
 #-------------------SOURCES FILES----------------------
 
@@ -72,11 +72,42 @@ re: fclean all
 
 #-------------------TESTS-----------------------
 
-test1 : all
-		./$(EXC) 5 800 200 200
+test_one_philo: all
+		./$(NAME) 1 800 200 200
 
-test2 : all
-		./$(EXC) 4 310 200 100
+# Test 1: no one should die
+test1:	all
+		./$(NAME) 5 800 200 200
 
-test3 : all
-		./$(EXC) 5 800 200 200 7
+# Test 2: no one should die and the philosophers each eats 7 times
+test2:	all
+		./$(NAME) 5 800 200 200 7
+
+test2_count:
+		make test2 | grep eating | wc -l
+
+# Test 3: no one should die
+test3:	all
+		./$(NAME) 4 410 200 200
+
+# Test 4: A philosopher should die
+test4:	all
+		./$(NAME) 4 310 200 100
+
+test5:	all
+		./$(NAME) 50 410 200 200
+
+test6:	all
+		./$(NAME) 200 410 200 200
+
+test_min: all
+		./$(NAME) 2 130 60 60
+
+test_min_d: all
+		./$(NAME) 2 120 60 60
+
+test_max: all
+		./$(NAME) 200 800 200 200
+
+test_max_d: all
+		./$(NAME) 200 310 200 100

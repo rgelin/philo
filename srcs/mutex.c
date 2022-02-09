@@ -6,7 +6,7 @@
 /*   By: rgelin <rgelin@student.s19.be>             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/14 15:39:19 by rgelin            #+#    #+#             */
-/*   Updated: 2021/12/22 22:02:19 by rgelin           ###   ########.fr       */
+/*   Updated: 2022/02/09 17:25:32 by rgelin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,6 +34,7 @@ int	destroy_mutex(t_data *data)
 	int	i;
 
 	i = -1;
+	pthread_mutex_unlock(&data->display);
 	pthread_mutex_destroy(&data->display);
 	while (++i < data->nb_philo)
 		pthread_mutex_unlock(&data->mutex[i]);
@@ -56,5 +57,6 @@ void	display_philo_message(t_philo *philo, long time, int id, char *msg)
 {
 	pthread_mutex_lock(philo->display);
 	printf("%ld %d %s\n", time, id, msg);
-	pthread_mutex_unlock(philo->display);
+	if (ft_strncmp(msg, "died", 4))
+		pthread_mutex_unlock(philo->display);
 }

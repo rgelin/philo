@@ -6,7 +6,7 @@
 /*   By: rgelin <rgelin@student.s19.be>             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/17 15:52:34 by rgelin            #+#    #+#             */
-/*   Updated: 2021/12/23 20:23:48 by rgelin           ###   ########.fr       */
+/*   Updated: 2022/02/09 17:21:48 by rgelin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,8 +34,9 @@ static void	philo_sleep(t_philo *philo)
 
 	start = get_time();
 	sleeping = 0;
-	display_philo_message(philo, start - *(philo->start_time), philo->id_philo, "is sleeping");
-	while (sleeping - start < philo->time_to_sleep)
+	if (!*(philo->die))
+		display_philo_message(philo, start - *(philo->start_time), philo->id_philo, "is sleeping");
+	while (*(philo->die) && (sleeping - start < philo->time_to_sleep))
 	{
 		sleeping = get_time();
 		// if (ft_dead(philo, sleeping))
@@ -51,6 +52,26 @@ static void	philo_sleep(t_philo *philo)
 		// 	return ;
 }
 
+static void	lock_fork(t_philo *philo)
+{
+	// long time;
+
+	// time = get_time();
+	if (philo->id_philo % 2)
+	{
+		pthread_mutex_lock(philo->right_fork);
+		display_philo_message(philo, get_time()- *(philo->start_time), philo->id_philo, "has taken a fork");
+		pthread_mutex_lock(philo->left_fork);
+		display_philo_message(philo, get_time()- *(philo->start_time), philo->id_philo, "has taken a fork");
+	}
+	else
+	{
+		pthread_mutex_lock(philo->left_fork);
+		display_philo_message(philo, get_time()- *(philo->start_time), philo->id_philo, "has taken a fork");
+		pthread_mutex_lock(philo->right_fork);
+		display_philo_message(philo, get_time()- *(philo->start_time), philo->id_philo, "has taken a fork");
+	}
+}
 
 static void	philo_eat(t_philo *philo)
 {
@@ -59,60 +80,21 @@ static void	philo_eat(t_philo *philo)
 	// static long	last_meal;
 
 	start = get_time();
-	// printf("philo %d: %ld\n", philo->id_philo, *(philo->start_time));
 	eating = 0;
-	// if (start  - last_meal  > philo->time_to_die)
-	// {
-	// 	*(philo->die) = 1;
-	// 	return ;
-	// }
-	// usleep((useconds_t)philo->time_to_eat);
-	// printf("%d last meal %ld\n", philo->id_philo, last_meal);
-	// printf("\n");
-	// printf("philo %d last_meal: %ld\n", philo->id_philo, philo->last_meal);
-	// printf("philo %d start: %ld\n", philo->id_philo, start);
-	// printf("philo %d diff: %ld < %ld", philo->id_philo, (start - philo->last_meal), (long)philo->time_to_die);
-	// printf("\n");
-	// printf("%d start %ld\n", philo->id_philo, start);
-		// if (ft_dead(philo, start))
-		// {
-		// 	printf("%s%d eating\n%s", GREEN, philo->id_philo, NO_COLOR);
-		// 	return ;
-		// }
-	// printf("%d last last_meal %ld\n", philo->id_philo, philo->last_meal);
-	display_philo_message(philo, start - *(philo->start_time), philo->id_philo, "is eating");
-	while (eating - start < philo->time_to_eat)
+	printf("start time: %ld\n", *(philo->start_time));
+	if (!*(philo->die))
+		display_philo_message(philo, start - *(philo->start_time), philo->id_philo, "is eating");
+	printf("start eat: %ld || diff: %ld", start, start - *(philo->start_time));
+	while (*(philo->die) && (eating - start < philo->time_to_eat))
 	{
 		eating = get_time();
 		
 	}
-	// printf("%d %stime eat: %ld\n%s", philo->id_philo, GREEN, eating - start, NO_COLOR);
-		// if (ft_dead(philo, start))
-		// 	return ;
 	philo->last_meal = get_time();
-	// printf("%d %slast meal: %ld\n%s", philo->id_philo, YELLOW, philo->last_meal, NO_COLOR);
 	pthread_mutex_unlock(philo->left_fork);
 	pthread_mutex_unlock(philo->right_fork);
-	// printf("%d new last meal %ld\n", philo->id_philo, last_meal);
 }
 
-static void	lock_fork(t_philo *philo)
-{
-	if (philo->id_philo % 2)
-	{
-		pthread_mutex_lock(philo->right_fork);
-		display_philo_message(philo, get_time() - *(philo->start_time), philo->id_philo, "has taken a fork");
-		pthread_mutex_lock(philo->left_fork);
-		display_philo_message(philo, get_time() - *(philo->start_time), philo->id_philo, "has taken a fork");
-	}
-	else
-	{
-		pthread_mutex_lock(philo->left_fork);
-		display_philo_message(philo, get_time() - *(philo->start_time), philo->id_philo, "has taken a fork");
-		pthread_mutex_lock(philo->right_fork);
-		display_philo_message(philo, get_time() - *(philo->start_time), philo->id_philo, "has taken a fork");
-	}
-}
 
 void	*routine_philo(void *arg)
 {
@@ -129,6 +111,8 @@ void	*routine_philo(void *arg)
 				philo_eat(philo);
 			if (!*(philo->die))
 				philo_sleep(philo);		
+			// if (*(philo->die))
+			// 	ft_died(philo);
 	}
 	return (NULL);
 }

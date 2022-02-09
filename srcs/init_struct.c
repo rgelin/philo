@@ -6,7 +6,7 @@
 /*   By: rgelin <rgelin@student.s19.be>             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/16 17:06:55 by rgelin            #+#    #+#             */
-/*   Updated: 2021/12/24 16:27:47 by rgelin           ###   ########.fr       */
+/*   Updated: 2022/02/09 16:43:47 by rgelin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,4 +62,12 @@ void	init_philo(t_data *data, t_philo *philo)
 			philo[i].nb_time_eat = data->nb_time_eat;
 		philo[i].display = &data->display;
 	}
+}
+
+void	init_struct_dead(t_data *data, t_philo **philo, t_dead *dead)
+{
+	dead->nb_philo= data->nb_philo;
+	dead->time_to_die = data->time_to_die;
+	dead->philo = *(philo);
+	dead->die = &data->die;
 }

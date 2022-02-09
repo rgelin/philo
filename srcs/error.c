@@ -6,7 +6,7 @@
 /*   By: rgelin <rgelin@student.s19.be>             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/14 15:31:59 by rgelin            #+#    #+#             */
-/*   Updated: 2021/12/14 15:32:23 by rgelin           ###   ########.fr       */
+/*   Updated: 2022/02/09 15:38:34 by rgelin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,4 +38,16 @@ int	check_error(int ac, char *av[])
 		}
 	}
 	return (0);
+}
+
+void	ft_free(t_data *data, char *err_msg)
+{
+	if (data)
+	{
+		destroy_mutex(data);
+		if (data->philo_thread)
+			free(data->philo_thread);
+	}
+	if (err_msg)
+		ft_perror(err_msg);
 }

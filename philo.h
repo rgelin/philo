@@ -6,7 +6,7 @@
 /*   By: rgelin <rgelin@student.s19.be>             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/14 14:53:17 by rgelin            #+#    #+#             */
-/*   Updated: 2021/12/24 16:24:39 by rgelin           ###   ########.fr       */
+/*   Updated: 2022/02/09 17:04:44 by rgelin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,9 +58,10 @@ typedef struct	s_philo
 
 typedef struct s_dead
 {
-	int	nb_philo;
-	int	time_to_die;
-	t_philo **philo;
+	int		nb_philo;
+	int		time_to_die;
+	int		*die;
+	t_philo *philo;
 }	t_dead;
 
 //==============LIBFT_UTILS==============//
@@ -68,11 +69,13 @@ typedef struct s_dead
 int		ft_strlen(char *str);
 long	ft_atoi(const char *str);
 int		ft_isdigit(int c);
+int		ft_strncmp(const char *s1, const char *s2, size_t n);
 
 //==============ERRORS==============//
 
 int		check_error(int ac, char *av[]);
 void	ft_perror(char *err_msg);
+void	ft_free(t_data *data, char *err_msg);
 
 //==============MUTEX==============//
 
@@ -83,10 +86,10 @@ void	display_philo_message(t_philo *philo, long time, int id, char *msg);
 //==============MAIN==============//
 int		init_struct_data(t_data *data, char *av[]);
 void	init_philo(t_data *data, t_philo *philo);
+void	init_struct_dead(t_data *data, t_philo **philo, t_dead *dead);
 long	get_time(void);
 void	*routine_philo(void *arg);
 
 void	*dead_thread_function(void *arg);
-int		ft_dead(t_philo *philo, long current_meal);
 
 #endif
