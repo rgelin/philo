@@ -6,7 +6,7 @@
 /*   By: rgelin <rgelin@student.s19.be>             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/17 15:52:34 by rgelin            #+#    #+#             */
-/*   Updated: 2022/02/09 17:45:27 by rgelin           ###   ########.fr       */
+/*   Updated: 2022/02/09 17:57:46 by rgelin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,16 +61,20 @@ static void	lock_fork(t_philo *philo)
 	if (philo->id_philo % 2)
 	{
 		pthread_mutex_lock(philo->right_fork);
-		display_philo_message(philo, get_time()- *(philo->start_time), philo->id_philo, "has taken a fork");
+		if (!*(philo->die))
+			display_philo_message(philo, get_time()- *(philo->start_time), philo->id_philo, "has taken a fork");
 		pthread_mutex_lock(philo->left_fork);
-		display_philo_message(philo, get_time()- *(philo->start_time), philo->id_philo, "has taken a fork");
+		if (!*(philo->die))
+			display_philo_message(philo, get_time()- *(philo->start_time), philo->id_philo, "has taken a fork");
 	}
 	else
 	{
 		pthread_mutex_lock(philo->left_fork);
-		display_philo_message(philo, get_time()- *(philo->start_time), philo->id_philo, "has taken a fork");
+		if (!*(philo->die))
+			display_philo_message(philo, get_time()- *(philo->start_time), philo->id_philo, "has taken a fork");
 		pthread_mutex_lock(philo->right_fork);
-		display_philo_message(philo, get_time()- *(philo->start_time), philo->id_philo, "has taken a fork");
+		if (!*(philo->die))
+			display_philo_message(philo, get_time()- *(philo->start_time), philo->id_philo, "has taken a fork");
 	}
 }
 
