@@ -6,7 +6,7 @@
 /*   By: rgelin <rgelin@student.s19.be>             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/17 15:52:34 by rgelin            #+#    #+#             */
-/*   Updated: 2022/02/09 17:21:48 by rgelin           ###   ########.fr       */
+/*   Updated: 2022/02/09 17:45:27 by rgelin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,15 +36,16 @@ static void	philo_sleep(t_philo *philo)
 	sleeping = 0;
 	if (!*(philo->die))
 		display_philo_message(philo, start - *(philo->start_time), philo->id_philo, "is sleeping");
-	while (*(philo->die) && (sleeping - start < philo->time_to_sleep))
-	{
-		sleeping = get_time();
-		// if (ft_dead(philo, sleeping))
-		// {
-		// 	printf("%ssleeping\n%s", GREEN, NO_COLOR);
-		// 	return ;
-		// }
-	}
+	usleep(philo->time_to_sleep * 1000);
+	// while ((sleeping - start < philo->time_to_sleep))
+	// {
+	// 	sleeping = get_time();
+	// 	// if (ft_dead(philo, sleeping))
+	// 	// {
+	// 	// 	printf("%ssleeping\n%s", GREEN, NO_COLOR);
+	// 	// 	return ;
+	// 	// }
+	// }
 	// printf("%d %stime sleep: %ld\n%s", philo->id_philo, GREEN, eating - start, NO_COLOR);
 	if (!*(philo->die))
 		display_philo_message(philo, get_time() - *(philo->start_time), philo->id_philo, "is thinking");
@@ -81,15 +82,16 @@ static void	philo_eat(t_philo *philo)
 
 	start = get_time();
 	eating = 0;
-	printf("start time: %ld\n", *(philo->start_time));
+	// printf("start time: %ld\n", *(philo->start_time));
 	if (!*(philo->die))
 		display_philo_message(philo, start - *(philo->start_time), philo->id_philo, "is eating");
-	printf("start eat: %ld || diff: %ld", start, start - *(philo->start_time));
-	while (*(philo->die) && (eating - start < philo->time_to_eat))
-	{
-		eating = get_time();
+	// printf("start eat: %ld || diff: %ld", start, start - *(philo->start_time));
+	usleep(philo->time_to_eat * 1000);
+	// while ((eating - start < philo->time_to_eat))
+	// {
+	// 	eating = get_time();
 		
-	}
+	// }
 	philo->last_meal = get_time();
 	pthread_mutex_unlock(philo->left_fork);
 	pthread_mutex_unlock(philo->right_fork);
