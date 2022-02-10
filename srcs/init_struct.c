@@ -6,7 +6,7 @@
 /*   By: rgelin <rgelin@student.s19.be>             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/16 17:06:55 by rgelin            #+#    #+#             */
-/*   Updated: 2022/02/10 17:04:26 by rgelin           ###   ########.fr       */
+/*   Updated: 2022/02/10 18:03:33 by rgelin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,9 +30,6 @@ int	init_struct_data(t_data *data, char *av[])
 	data->philo_thread = malloc(sizeof(pthread_t) * data->nb_philo);
 	if (!data->philo_thread)
 		return (-1);
-	// data->dead = malloc(sizeof(pthread_t));
-	// if (!data->dead)
-	// 	return (-1);
 	return (0);
 }
 
