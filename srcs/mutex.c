@@ -6,7 +6,7 @@
 /*   By: rgelin <rgelin@student.s19.be>             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/14 15:39:19 by rgelin            #+#    #+#             */
-/*   Updated: 2022/02/09 17:55:01 by rgelin           ###   ########.fr       */
+/*   Updated: 2022/02/10 16:53:37 by rgelin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,13 +43,23 @@ int	destroy_mutex(t_data *data)
 	{
 		while (++i < data->nb_philo)
 		{
-			if (pthread_mutex_destroy(&data->mutex[i]))
-			{
-				ft_perror("ERROR: destroy mutex");
-				return (-1);
-			}
+			// if (pthread_detach(data->philo_thread[i]))
+			// {
+			// 	ft_perror("ERROR: detach thread philo");
+			// 	return (-1);
+			// }
+			// if (pthread_mutex_destroy(&data->mutex[i]))
+			// {
+			// 	ft_perror("ERROR: destroy mutex");
+			// 	return (-1);
+			// }
 		}
 	}
+	// if (pthread_detach(data->dead))
+	// {
+	// 	ft_perror("ERROR: detach thread dead");
+	// 	return (-1);
+	// }
 	return (0);
 }
 

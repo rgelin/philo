@@ -6,7 +6,7 @@
 /*   By: rgelin <rgelin@student.s19.be>             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/14 14:53:17 by rgelin            #+#    #+#             */
-/*   Updated: 2022/02/09 17:04:44 by rgelin           ###   ########.fr       */
+/*   Updated: 2022/02/10 15:44:56 by rgelin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,6 +38,7 @@ typedef struct	s_data
 	pthread_t		*philo_thread;
 	pthread_t		dead;
 	pthread_mutex_t	display;
+	pthread_mutex_t	dead_mutex;
 }	t_data;
 
 typedef struct	s_philo
@@ -53,7 +54,8 @@ typedef struct	s_philo
 	pthread_mutex_t	*right_fork;
 	pthread_mutex_t	*display;
 	long			*start_time;
-	long			last_meal;	
+	long			last_meal;
+	pthread_mutex_t	*dead_mutex;
 }	t_philo;
 
 typedef struct s_dead

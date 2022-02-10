@@ -6,58 +6,38 @@
 /*   By: rgelin <rgelin@student.s19.be>             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/17 15:52:34 by rgelin            #+#    #+#             */
-/*   Updated: 2022/02/09 17:57:46 by rgelin           ###   ########.fr       */
+/*   Updated: 2022/02/10 16:58:51 by rgelin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../philo.h"
-
-// int	ft_dead(t_philo *philo, long current_meal)
-// {
-// 	if (philo->last_meal == 0)
-// 		philo->last_meal = *(philo->start_time);
-// 	// printf("%d %stime to die: %ld\n%s", philo->id_philo, RED, current_meal - philo->last_meal, NO_COLOR);
-// 	if (current_meal - philo->last_meal > philo->time_to_die)
-// 	{
-// 		*(philo->die) = 1;
-// 		// printf("%sdie time: %ld\n%s", RED, get_time() - *(philo->start_time), NO_COLOR);
-// 		display_philo_message(philo, get_time() - *(philo->start_time), philo->id_philo, "died");
-// 		return (1);
-// 	}
-// 	return (0);
-// }
 
 static void	philo_sleep(t_philo *philo)
 {
 	long	start;
 	long	sleeping;
 
+	pthread_mutex_unlock(philo->dead_mutex);
 	start = get_time();
 	sleeping = 0;
+	pthread_mutex_lock(philo->dead_mutex);
 	if (!*(philo->die))
 		display_philo_message(philo, start - *(philo->start_time), philo->id_philo, "is sleeping");
-	usleep(philo->time_to_sleep * 1000);
-	// while ((sleeping - start < philo->time_to_sleep))
-	// {
-	// 	sleeping = get_time();
-	// 	// if (ft_dead(philo, sleeping))
-	// 	// {
-	// 	// 	printf("%ssleeping\n%s", GREEN, NO_COLOR);
-	// 	// 	return ;
-	// 	// }
-	// }
-	// printf("%d %stime sleep: %ld\n%s", philo->id_philo, GREEN, eating - start, NO_COLOR);
+	pthread_mutex_unlock(philo->dead_mutex);
+	while ((sleeping - start < philo->time_to_sleep))
+	{
+		usleep(10);
+		sleeping = get_time();
+	}
+	pthread_mutex_lock(philo->dead_mutex);
 	if (!*(philo->die))
 		display_philo_message(philo, get_time() - *(philo->start_time), philo->id_philo, "is thinking");
-		// if (ft_dead(philo, start))
-		// 	return ;
+	pthread_mutex_unlock(philo->dead_mutex);
 }
 
 static void	lock_fork(t_philo *philo)
 {
-	// long time;
-
-	// time = get_time();
+	pthread_mutex_unlock(philo->dead_mutex);
 	if (philo->id_philo % 2)
 	{
 		pthread_mutex_lock(philo->right_fork);
@@ -82,20 +62,19 @@ static void	philo_eat(t_philo *philo)
 {
 	long	start;
 	long	eating;
-	// static long	last_meal;
 
+	pthread_mutex_unlock(philo->dead_mutex);
 	start = get_time();
 	eating = 0;
-	// printf("start time: %ld\n", *(philo->start_time));
+	pthread_mutex_lock(philo->dead_mutex);
 	if (!*(philo->die))
 		display_philo_message(philo, start - *(philo->start_time), philo->id_philo, "is eating");
-	// printf("start eat: %ld || diff: %ld", start, start - *(philo->start_time));
-	usleep(philo->time_to_eat * 1000);
-	// while ((eating - start < philo->time_to_eat))
-	// {
-	// 	eating = get_time();
-		
-	// }
+	pthread_mutex_unlock(philo->dead_mutex);
+	while ((eating - start < philo->time_to_eat))
+	{
+		usleep(10);
+		eating = get_time();
+	}
 	philo->last_meal = get_time();
 	pthread_mutex_unlock(philo->left_fork);
 	pthread_mutex_unlock(philo->right_fork);
@@ -106,19 +85,21 @@ void	*routine_philo(void *arg)
 {
 	t_philo *philo = (t_philo *)arg;
 
+	pthread_mutex_lock(philo->dead_mutex);
 	while (*(philo->die))
 		usleep(10);
-	// philo->last_meal = *(philo->start_time);
+	pthread_mutex_unlock(philo->dead_mutex);
 	while (!*(philo->die))
 	{
+			pthread_mutex_lock(philo->dead_mutex);
 			if (!*(philo->die))
 				lock_fork(philo);
+			pthread_mutex_lock(philo->dead_mutex);
 			if (!*(philo->die))
 				philo_eat(philo);
+			pthread_mutex_lock(philo->dead_mutex);
 			if (!*(philo->die))
-				philo_sleep(philo);		
-			// if (*(philo->die))
-			// 	ft_died(philo);
+				philo_sleep(philo);
 	}
 	return (NULL);
 }

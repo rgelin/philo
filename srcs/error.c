@@ -6,7 +6,7 @@
 /*   By: rgelin <rgelin@student.s19.be>             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/14 15:31:59 by rgelin            #+#    #+#             */
-/*   Updated: 2022/02/09 15:38:34 by rgelin           ###   ########.fr       */
+/*   Updated: 2022/02/10 17:02:19 by rgelin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,8 +29,10 @@ int	check_error(int ac, char *av[])
 	while (++i < ac)
 	{
 		j = -1;
-		if (ft_atoi(av[i]) >= INT_MAX)
-			return (-1);
+		if (av[i][0] == '-')
+			return (1);
+		if (ft_atoi(av[i]) > INT_MAX)
+			return (1);
 		while (av[i][++j])
 		{
 			if (ft_isdigit(av[i][j]) == 0)
