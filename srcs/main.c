@@ -6,7 +6,7 @@
 /*   By: rgelin <rgelin@student.s19.be>             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/14 14:52:08 by rgelin            #+#    #+#             */
-/*   Updated: 2022/02/10 17:54:11 by rgelin           ###   ########.fr       */
+/*   Updated: 2022/02/15 17:04:43 by rgelin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,8 +49,10 @@ int	ft_create_threads(t_data *data, t_philo *philo, t_dead *dead)
 		ft_perror("ERROR: couldn't create thread");
 		return (-1);
 	}
-	data->die = 0;
+	// pthread_mutex_lock(&data->dead_mutex);
 	data->start_time = get_time();
+	data->die = 0;
+	// pthread_mutex_unlock(&data->dead_mutex);
 	if (pthread_join(data->dead, NULL))
 	{
 		ft_perror("ERROR: pthread join\n");
@@ -87,6 +89,9 @@ int	main(int ac, char *av[])
 		return (-1);
 	}
 	destroy_mutex(&data);
-	system("leaks philo");
+	// int i = -1;
+	// while (++i < data.nb_philo)
+	// 	free(&philo[i]);
+	// system("leaks philo");
 	return (0);
 }

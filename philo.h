@@ -6,7 +6,7 @@
 /*   By: rgelin <rgelin@student.s19.be>             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/14 14:53:17 by rgelin            #+#    #+#             */
-/*   Updated: 2022/02/10 15:44:56 by rgelin           ###   ########.fr       */
+/*   Updated: 2022/02/15 16:36:37 by rgelin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,10 +60,13 @@ typedef struct	s_philo
 
 typedef struct s_dead
 {
-	int		nb_philo;
-	int		time_to_die;
-	int		*die;
-	t_philo *philo;
+	int				nb_philo;
+	int				nb_time_eat;
+	int				nb_philo_finish_eating;
+	int				time_to_die;
+	int				*die;
+	t_philo 		*philo;
+	pthread_mutex_t	*display;
 }	t_dead;
 
 //==============LIBFT_UTILS==============//
@@ -83,7 +86,7 @@ void	ft_free(t_data *data, char *err_msg);
 
 int		init_mutex_tab(t_data *data);
 int		destroy_mutex(t_data *data);
-void	display_philo_message(t_philo *philo, long time, int id, char *msg);
+void	display_philo_message(t_philo *philo, int id, char *msg);
 
 //==============MAIN==============//
 int		init_struct_data(t_data *data, char *av[]);

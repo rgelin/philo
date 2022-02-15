@@ -6,7 +6,7 @@
 /*   By: rgelin <rgelin@student.s19.be>             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/16 17:06:55 by rgelin            #+#    #+#             */
-/*   Updated: 2022/02/10 18:03:33 by rgelin           ###   ########.fr       */
+/*   Updated: 2022/02/15 16:36:46 by rgelin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,7 @@ int	init_struct_data(t_data *data, char *av[])
 	if (av[5])
 		data->nb_time_eat = ft_atoi(av[5]);
 	else
-		data->nb_time_eat = 0;
+		data->nb_time_eat = -1;
 	data->die = 1;
 	data->start_time = 0;
 	data->mutex = malloc(sizeof(pthread_mutex_t) * data->nb_philo);
@@ -51,9 +51,10 @@ void	init_philo(t_data *data, t_philo *philo)
 		philo[i].time_to_eat = data->time_to_eat;
 		philo[i].time_to_sleep = data->time_to_sleep;
 		philo[i].die = &data->die;
+		philo[i].nb_time_eat = 0;
 		philo[i].start_time = &data->start_time;
-		if (data->nb_time_eat)
-			philo[i].nb_time_eat = data->nb_time_eat;
+		// if (data->nb_time_eat)
+		// 	philo[i].nb_time_eat = data->nb_time_eat;
 		philo[i].display = &data->display;
 		philo[i].dead_mutex = &data->dead_mutex;
 	}
@@ -62,7 +63,9 @@ void	init_philo(t_data *data, t_philo *philo)
 void	init_struct_dead(t_data *data, t_philo **philo, t_dead *dead)
 {
 	dead->nb_philo= data->nb_philo;
+	dead->nb_time_eat = data->nb_time_eat;
 	dead->time_to_die = data->time_to_die;
 	dead->philo = *(philo);
 	dead->die = &data->die;
+	dead->display = &data->display;
 }

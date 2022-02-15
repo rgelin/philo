@@ -9,7 +9,7 @@ SOURCES		=	./srcs/
 #-------------------COMPILATION----------------------
 
 CC			=	gcc
-FLAGS		=	-Wall -Werror -Wextra 
+FLAGS		=	-Wall -Werror -Wextra
 
 #-------------------SOURCES FILES----------------------
 
@@ -81,7 +81,7 @@ test1:	all
 
 # Test 2: no one should die and the philosophers each eats 7 times
 test2:	all
-		./$(NAME) 5 800 200 200 7
+		./$(NAME) 5 800 200 200 5
 
 test2_count:
 		make test2 | grep eating | wc -l
