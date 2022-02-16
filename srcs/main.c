@@ -6,7 +6,7 @@
 /*   By: rgelin <rgelin@student.s19.be>             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/14 14:52:08 by rgelin            #+#    #+#             */
-/*   Updated: 2022/02/15 17:04:43 by rgelin           ###   ########.fr       */
+/*   Updated: 2022/02/16 16:52:05 by rgelin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,22 +41,24 @@ int	ft_create_threads(t_data *data, t_philo *philo, t_dead *dead)
 		if (pthread_create(&data->philo_thread[i], NULL, &routine_philo, (void *)&philo[i]))
 		{
 			ft_perror("ERROR: couldn't create thread");
-			return (-1);
+			return (1);
 		}
 	}
 	if (pthread_create(&data->dead, NULL, &dead_thread_function, (void *)dead))
 	{
 		ft_perror("ERROR: couldn't create thread");
-		return (-1);
+		return (1);
 	}
-	// pthread_mutex_lock(&data->dead_mutex);
+	pthread_mutex_lock(&data->dead_mutex);
 	data->start_time = get_time();
+	pthread_mutex_unlock(&data->dead_mutex);
+	pthread_mutex_lock(&data->dead_mutex);
 	data->die = 0;
-	// pthread_mutex_unlock(&data->dead_mutex);
+	pthread_mutex_unlock(&data->dead_mutex);
 	if (pthread_join(data->dead, NULL))
 	{
 		ft_perror("ERROR: pthread join\n");
-		return (-1);
+		return (1);
 	}
 	return (0);
 }
@@ -72,7 +74,11 @@ int	main(int ac, char *av[])
 		ft_perror("ERROR: wrong arguments");
 		return (-1);
 	}
-	init_struct_data(&data, av);
+	if (init_struct_data(&data, av))
+	{
+		ft_perror("ERROR: init data");
+		return (-1);
+	}
 	init_mutex_tab(&data);
 	philo = (t_philo *)malloc(sizeof(t_philo) * (data.nb_philo));
 	if (!philo)
@@ -84,14 +90,10 @@ int	main(int ac, char *av[])
 	init_struct_dead(&data, &philo, &dead);
 	if (ft_create_threads(&data, philo, &dead))
 	{
-		// destroy_mutex(&data);
 		ft_free(&data, "ERROR: thread");
 		return (-1);
 	}
 	destroy_mutex(&data);
-	// int i = -1;
-	// while (++i < data.nb_philo)
-	// 	free(&philo[i]);
 	// system("leaks philo");
 	return (0);
 }

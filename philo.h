@@ -6,7 +6,7 @@
 /*   By: rgelin <rgelin@student.s19.be>             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/14 14:53:17 by rgelin            #+#    #+#             */
-/*   Updated: 2022/02/15 16:36:37 by rgelin           ###   ########.fr       */
+/*   Updated: 2022/02/16 16:53:21 by rgelin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -67,6 +67,7 @@ typedef struct s_dead
 	int				*die;
 	t_philo 		*philo;
 	pthread_mutex_t	*display;
+	pthread_mutex_t	*dead_mutex;
 }	t_dead;
 
 //==============LIBFT_UTILS==============//

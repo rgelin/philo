@@ -6,7 +6,7 @@
 /*   By: rgelin <rgelin@student.s19.be>             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/16 17:06:55 by rgelin            #+#    #+#             */
-/*   Updated: 2022/02/15 16:36:46 by rgelin           ###   ########.fr       */
+/*   Updated: 2022/02/16 16:53:40 by rgelin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -68,4 +68,5 @@ void	init_struct_dead(t_data *data, t_philo **philo, t_dead *dead)
 	dead->philo = *(philo);
 	dead->die = &data->die;
 	dead->display = &data->display;
+	dead->dead_mutex = &data->dead_mutex;
 }

@@ -6,7 +6,7 @@
 /*   By: rgelin <rgelin@student.s19.be>             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/17 15:52:34 by rgelin            #+#    #+#             */
-/*   Updated: 2022/02/15 15:37:43 by rgelin           ###   ########.fr       */
+/*   Updated: 2022/02/16 16:55:38 by rgelin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,8 +22,10 @@ static void	philo_sleep(t_philo *philo)
 	sleeping = 0;
 	pthread_mutex_lock(philo->dead_mutex);
 	if (!*(philo->die))
+	{
+		pthread_mutex_unlock(philo->dead_mutex);
 		display_philo_message(philo, philo->id_philo, "is sleeping");
-	pthread_mutex_unlock(philo->dead_mutex);
+	}
 	while ((sleeping - start < philo->time_to_sleep))
 	{
 		usleep(10);
@@ -31,8 +33,10 @@ static void	philo_sleep(t_philo *philo)
 	}
 	pthread_mutex_lock(philo->dead_mutex);
 	if (!*(philo->die))
+	{
+		pthread_mutex_unlock(philo->dead_mutex);
 		display_philo_message(philo, philo->id_philo, "is thinking");
-	pthread_mutex_unlock(philo->dead_mutex);
+	}
 }
 
 static void	lock_fork(t_philo *philo)
@@ -42,27 +46,31 @@ static void	lock_fork(t_philo *philo)
 	{
 		pthread_mutex_lock(philo->right_fork);
 		pthread_mutex_lock(philo->dead_mutex);
-		if (!*(philo->die))
-			display_philo_message(philo, philo->id_philo, "has taken a fork");
+		if (*(philo->die))
+			return ;
+		display_philo_message(philo, philo->id_philo, "has taken a fork");
 		pthread_mutex_unlock(philo->dead_mutex);
 		pthread_mutex_lock(philo->left_fork);
 		pthread_mutex_lock(philo->dead_mutex);
-		if (!*(philo->die))
-			display_philo_message(philo, philo->id_philo, "has taken a fork");
+		if (*(philo->die))
+			return ;
+		display_philo_message(philo, philo->id_philo, "has taken a fork");
 		pthread_mutex_unlock(philo->dead_mutex);
 	}
 	else
 	{
 		pthread_mutex_lock(philo->left_fork);
 		pthread_mutex_lock(philo->dead_mutex);
-		if (!*(philo->die))
-			display_philo_message(philo, philo->id_philo, "has taken a fork");
+		if (*(philo->die))
+			return ;
 		pthread_mutex_unlock(philo->dead_mutex);
+		display_philo_message(philo, philo->id_philo, "has taken a fork");
 		pthread_mutex_lock(philo->right_fork);
 		pthread_mutex_lock(philo->dead_mutex);
-		if (!*(philo->die))
-			display_philo_message(philo, philo->id_philo, "has taken a fork");
+		if (*(philo->die))
+			return ;
 		pthread_mutex_unlock(philo->dead_mutex);
+		display_philo_message(philo, philo->id_philo, "has taken a fork");
 	}
 }
 
@@ -76,15 +84,17 @@ static void	philo_eat(t_philo *philo)
 	eating = 0;
 	pthread_mutex_lock(philo->dead_mutex);
 	if (!*(philo->die))
-		display_philo_message(philo, philo->id_philo, "is eating");
-	pthread_mutex_unlock(philo->dead_mutex);
-	philo->nb_time_eat++;
+	{
+		pthread_mutex_unlock(philo->dead_mutex);
+		display_philo_message(philo, philo->id_philo, "is eating");	
+	}
 	philo->last_meal = get_time();
 	while ((eating - start < philo->time_to_eat))
 	{
 		usleep(10);
 		eating = get_time();
 	}
+	philo->nb_time_eat++;
 	pthread_mutex_unlock(philo->left_fork);
 	pthread_mutex_unlock(philo->right_fork);
 }
@@ -101,11 +111,12 @@ void	*routine_philo(void *arg)
 		usleep(10);
 		pthread_mutex_lock(philo->dead_mutex);
 	}
-	// pthread_mutex_unlock(philo->dead_mutex);
+	pthread_mutex_unlock(philo->dead_mutex);
+	pthread_mutex_lock(philo->dead_mutex);
 	while (!*(philo->die))
 	{
-			// pthread_mutex_unlock(philo->dead_mutex);
-			// pthread_mutex_lock(philo->dead_mutex);
+			pthread_mutex_unlock(philo->dead_mutex);
+			pthread_mutex_lock(philo->dead_mutex);
 			if (!*(philo->die))
 				lock_fork(philo);
 			pthread_mutex_lock(philo->dead_mutex);
