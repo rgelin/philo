@@ -6,7 +6,7 @@
 /*   By: rgelin <rgelin@student.s19.be>             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/17 15:52:34 by rgelin            #+#    #+#             */
-/*   Updated: 2022/02/16 16:55:38 by rgelin           ###   ########.fr       */
+/*   Updated: 2022/02/16 17:35:17 by rgelin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -88,7 +88,9 @@ static void	philo_eat(t_philo *philo)
 		pthread_mutex_unlock(philo->dead_mutex);
 		display_philo_message(philo, philo->id_philo, "is eating");	
 	}
+	pthread_mutex_lock(philo->dead_mutex);
 	philo->last_meal = get_time();
+	pthread_mutex_unlock(philo->dead_mutex);
 	while ((eating - start < philo->time_to_eat))
 	{
 		usleep(10);

@@ -6,7 +6,7 @@
 /*   By: rgelin <rgelin@student.s19.be>             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/23 20:06:53 by rgelin            #+#    #+#             */
-/*   Updated: 2022/02/16 17:01:38 by rgelin           ###   ########.fr       */
+/*   Updated: 2022/02/16 17:38:36 by rgelin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,13 +23,13 @@ int	ft_dead(t_dead *dead)
 	{
 		if (dead->philo[i].last_meal == 0)
 		{
-			// pthread_mutex_lock(dead->dead_mutex);
 			dead->philo[i].last_meal = *(dead->philo[i].start_time);
-			// pthread_mutex_unlock(dead->dead_mutex);
 		}
 		if (dead->nb_time_eat != -1 && dead->philo[i].nb_time_eat >= dead->nb_time_eat)
 		{
+			// pthread_mutex_lock(dead->dead_mutex);
 			dead->philo[i].nb_time_eat = -10000;
+			// pthread_mutex_unlock(dead->dead_mutex);
 			dead->nb_philo_finish_eating++;
 		}
 		if (dead->nb_philo_finish_eating >= dead->nb_philo)
@@ -65,8 +65,10 @@ void	*dead_thread_function(void *arg)
 		pthread_mutex_lock(dead->dead_mutex);
 	}
 	pthread_mutex_unlock(dead->dead_mutex);
+	pthread_mutex_lock(dead->dead_mutex);
 	while (!*(dead->die))
 	{
+		pthread_mutex_unlock(dead->dead_mutex);
 		pthread_mutex_lock(dead->dead_mutex);
 		if (ft_dead(dead))
 			break ;
