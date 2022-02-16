@@ -9,7 +9,7 @@ SOURCES		=	./srcs/
 #-------------------COMPILATION----------------------
 
 CC			=	gcc
-FLAGS		=	-Wall -Werror -Wextra
+FLAGS		=	-Wall -Werror -Wextra -pthread -fsanitize=thread
 
 #-------------------SOURCES FILES----------------------
 
