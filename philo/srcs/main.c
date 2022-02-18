@@ -6,7 +6,7 @@
 /*   By: rgelin <rgelin@student.s19.be>             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/14 14:52:08 by rgelin            #+#    #+#             */
-/*   Updated: 2022/02/16 16:52:05 by rgelin           ###   ########.fr       */
+/*   Updated: 2022/02/18 17:24:07 by rgelin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -63,10 +63,29 @@ int	ft_create_threads(t_data *data, t_philo *philo, t_dead *dead)
 	return (0);
 }
 
+int	philosopher(t_data *data, t_philo *philo, t_dead *dead)
+{
+	init_mutex_tab(data);
+	philo = (t_philo *)malloc(sizeof(t_philo) * (data->nb_philo));
+	if (!philo)
+	{
+		ft_free(data, "ERROR: malloc");
+		return (1);
+	}
+	init_philo(data, philo);
+	init_struct_dead(data, &philo, dead);
+	if (ft_create_threads(data, philo, dead))
+	{
+		ft_free(data, "ERROR: thread");
+		return (1);
+	}
+	return (0);
+}
+
 int	main(int ac, char *av[])
 {
 	t_data	data;
-	t_philo	*philo;
+	t_philo	philo;
 	t_dead	dead;
 
 	if (check_error(ac, av))
@@ -79,20 +98,8 @@ int	main(int ac, char *av[])
 		ft_perror("ERROR: init data");
 		return (-1);
 	}
-	init_mutex_tab(&data);
-	philo = (t_philo *)malloc(sizeof(t_philo) * (data.nb_philo));
-	if (!philo)
-	{
-		ft_free(&data, "ERROR: malloc");
+	if (philosopher(&data, &philo, &dead))
 		return (-1);
-	}
-	init_philo(&data, philo);
-	init_struct_dead(&data, &philo, &dead);
-	if (ft_create_threads(&data, philo, &dead))
-	{
-		ft_free(&data, "ERROR: thread");
-		return (-1);
-	}
 	destroy_mutex(&data);
 	// system("leaks philo");
 	return (0);

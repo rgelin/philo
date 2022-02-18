@@ -107,7 +107,7 @@ test_min_d: all
 		./$(NAME) 2 120 60 60
 
 test_max: all
-		./$(NAME) 200 800 200 200
+		./$(NAME) 200 8000 200 200
 
 test_max_d: all
 		./$(NAME) 200 310 200 100

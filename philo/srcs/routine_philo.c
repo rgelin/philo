@@ -6,7 +6,7 @@
 /*   By: rgelin <rgelin@student.s19.be>             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/17 15:52:34 by rgelin            #+#    #+#             */
-/*   Updated: 2022/02/16 17:35:17 by rgelin           ###   ########.fr       */
+/*   Updated: 2022/02/18 17:39:34 by rgelin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,13 +47,20 @@ static void	lock_fork(t_philo *philo)
 		pthread_mutex_lock(philo->right_fork);
 		pthread_mutex_lock(philo->dead_mutex);
 		if (*(philo->die))
+		{
+			pthread_mutex_unlock(philo->dead_mutex);
 			return ;
+		}
+		// printf("\n\nadress: %p\n\n", philo->die);
 		display_philo_message(philo, philo->id_philo, "has taken a fork");
 		pthread_mutex_unlock(philo->dead_mutex);
 		pthread_mutex_lock(philo->left_fork);
 		pthread_mutex_lock(philo->dead_mutex);
 		if (*(philo->die))
+		{
+			pthread_mutex_unlock(philo->dead_mutex);
 			return ;
+		}
 		display_philo_message(philo, philo->id_philo, "has taken a fork");
 		pthread_mutex_unlock(philo->dead_mutex);
 	}
@@ -62,13 +69,19 @@ static void	lock_fork(t_philo *philo)
 		pthread_mutex_lock(philo->left_fork);
 		pthread_mutex_lock(philo->dead_mutex);
 		if (*(philo->die))
+		{
+			pthread_mutex_unlock(philo->dead_mutex);
 			return ;
+		}
 		pthread_mutex_unlock(philo->dead_mutex);
 		display_philo_message(philo, philo->id_philo, "has taken a fork");
 		pthread_mutex_lock(philo->right_fork);
 		pthread_mutex_lock(philo->dead_mutex);
 		if (*(philo->die))
+		{
+			pthread_mutex_unlock(philo->dead_mutex);
 			return ;
+		}
 		pthread_mutex_unlock(philo->dead_mutex);
 		display_philo_message(philo, philo->id_philo, "has taken a fork");
 	}
@@ -82,6 +95,7 @@ static void	philo_eat(t_philo *philo)
 	pthread_mutex_unlock(philo->dead_mutex);
 	start = get_time();
 	eating = 0;
+	// printf("\n\nadress: %p\n\n", &eating);
 	pthread_mutex_lock(philo->dead_mutex);
 	if (!*(philo->die))
 	{
@@ -90,13 +104,16 @@ static void	philo_eat(t_philo *philo)
 	}
 	pthread_mutex_lock(philo->dead_mutex);
 	philo->last_meal = get_time();
+	// printf("\n\nadress[%d]: %p\n\n", philo->id_philo, &philo->nb_time_eat);
 	pthread_mutex_unlock(philo->dead_mutex);
 	while ((eating - start < philo->time_to_eat))
 	{
 		usleep(10);
 		eating = get_time();
 	}
+	pthread_mutex_lock(philo->dead_mutex);
 	philo->nb_time_eat++;
+	pthread_mutex_unlock(philo->dead_mutex);
 	pthread_mutex_unlock(philo->left_fork);
 	pthread_mutex_unlock(philo->right_fork);
 }
